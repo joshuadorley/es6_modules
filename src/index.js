@@ -1,59 +1,63 @@
-import WishList from "./src/wishlist";
+import { WishList } from "./wishlist.js";
 
-let form = document.querySelector("#submitForm");
-let makeInput = document.querySelector("#makeInput");
-let modelInput = document.querySelector("#modelInput");
-let yearInput = document.querySelector("#yearInput");
-let makeDisplay = document.querySelector("#car-make");
-let modelDisplay = document.querySelector("#car-model");
-let yearDisplay = document.querySelector("#car-year");
-let removeBtn = document.querySelector("#removeBtn");
-let wishlistUl = document.querySelector("#wishListContainer > ul");
+const form = document.getElementById("submitForm");
+const makeInput = document.getElementById("makeInput");
+const modelInput = document.getElementById("modelInput");
+const yearInput = document.getElementById("yearInput");
+const makeDisplay = document.getElementById("car-make");
+const modelDisplay = document.getElementById("car-model");
+const yearDisplay = document.getElementById("car-year");
+const removeBtn = document.querySelector(".removeBtn");
+const wishListUl = document.querySelector("#wishListContainer ul");
 
-let wishlist = new WishList();
-
-form.addEventListener("submit", addCar);
-
-removeBtn.addEventListener("click", removeCar);
-
-function updateDOMList() {
-  wishlistUl.innerHTML = "";
-  wishlist.list.forEach((car) => {
-    const li = document.createElement("li");
-    li.textContent = `${car.make} ${car.model}`;
-    li.addEventListener("click", () => showCarDetails(car));
-    wishlistUl.appendChild(li);
-  });
-}
+const wishlist = new WishList();
 
 function showCarDetails(car) {
-  makeDisplay.textContent = car.make;
-  modelDisplay.textContent = car.model;
-  yearDisplay.textContent = car.year;
-  removeBtn.disabled = false;
-  removeBtn.setAttribute("data-carId", car.id);
-}
+    makeDisplay.textContent = car.make;
+    modelDisplay.textContent = car.model;
+    yearDisplay.textContent = car.year;
+  
+    removeBtn.disabled = false;
+    removeBtn.setAttribute("data-carId", car.id);
+  }
 
-function addCar(event) {
-  event.preventDefault();
+  function updateDOMList() {
+    wishListUl.innerHTML = "";
+  
+    wishlist.list.forEach(car => {
+      const li = document.createElement("li");
+      li.textContent = `${car.make} ${car.model}`;
+      li.addEventListener("click", () => showCarDetails(car));
+      wishListUl.appendChild(li);
+    });
+  }
 
-  let make = makeInput.value;
-  let model = modelInput.value;
-  let year = yearInput.value;
+  function addCar(event) {
+    event.preventDefault();
+  
+    const make = makeInput.value;
+    const model = modelInput.value;
+    const year = yearInput.value;
+  
+    wishlist.add(make, model, year);
+    updateDOMList();
+  
+    form.reset();
+  }
+  
+  form.addEventListener("submit", addCar);
 
-  wishlist.add(make, model, year);
+  function removeCar() {
+  const carId = Number(removeBtn.getAttribute("data-carId"));
 
-  updateDOMList();
-}
-
-function removeCar() {
-  let carId = Number(removeBtn.getAttribute("data-carId"));
   wishlist.remove(carId);
-
   updateDOMList();
 
   makeDisplay.textContent = "";
   modelDisplay.textContent = "";
   yearDisplay.textContent = "";
+
   removeBtn.disabled = true;
 }
+
+removeBtn.addEventListener("click", removeCar);
