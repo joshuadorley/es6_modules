@@ -10,6 +10,8 @@ const yearDisplay = document.getElementById("car-year");
 const removeBtn = document.querySelector(".removeBtn");
 const wishListUl = document.querySelector("#wishListContainer ul");
 
+console.log(removeBtn);
+
 const wishlist = new WishList();
 
 function showCarDetails(car) {
